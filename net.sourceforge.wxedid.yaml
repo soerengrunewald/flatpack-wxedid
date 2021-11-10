@@ -1,0 +1,36 @@
+id: net.sourceforge.wxedid
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: wxedid
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --filesystem=host
+cleanup:
+  - /include
+  - /lib/pkgconfig
+modules:
+  - name: wxWidgets
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /lib/wx
+      - /share/bakefile
+      - /share/aclocal
+    sources:
+      - type: archive
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.5/wxWidgets-3.1.5.tar.bz2
+        sha256: d7b3666de33aa5c10ea41bb9405c40326e1aeb74ee725bb88f90f1d50270a224
+
+  - name: wxedid
+    buildsystem: autotools
+    post-install:
+      - desktop-file-install --dir=/app/share/applications net.sourceforge.wxedid.desktop
+    sources:
+      - type: archive
+        url: https://sourceforge.net/projects/wxedid/files/wxedid-0.0.26.tar.gz
+        sha256: 9e434c20f20943791bbb343eb42d5913dcc0226e65cc884acfbfbfc908f7dff9
+      - type: file
+        path: net.sourceforge.wxedid.desktop
+
